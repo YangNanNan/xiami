@@ -1,3 +1,4 @@
+//轮播图代码
 ~function () {
     /*
      * 第一步：造数据 动态绑定
@@ -5,7 +6,8 @@
     var banner = document.getElementById("banner");
     var inner = document.getElementById("inner");
     var tips = document.getElementById("tips");
-    var imgList = document.getElementsByTagName("img");
+    var imgList = inner.getElementsByTagName("img");
+    console.log(imgList.length);
     var oLis = tips.getElementsByTagName("li");
     var jsonData = null;
     !function dataBind() {
@@ -107,3 +109,7 @@
     }();
 
 }();
+//新碟首发
+
+var xhr=new XMLHttpRequest();
+xhr.open("get","musicdata.json",false);
