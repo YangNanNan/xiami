@@ -1,27 +1,34 @@
-//ÂÖ²¥Í¼´úÂë
+/**
+ *
+ * @param {String}type æ•°æ®è¯·æ±‚ç±»å‹ getè¿˜æ˜¯post
+ * @param {String}url  æ•°æ®è¯·æ±‚åœ°å€
+ */
+function ajaxSend(type,url){
+    var data = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open(type, url, false);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && /^2\d{2}$/.test(xhr.status)) {
+            data = utils.jsonParse(xhr.responseText);
+        }
+    };
+    xhr.send(null);
+    return data;
+}
+//è½®æ’­å›¾ä»£ç 
 ~function () {
     /*
-     * µÚÒ»²½£ºÔìÊı¾İ ¶¯Ì¬°ó¶¨
+     * ç¬¬ä¸€æ­¥ï¼šé€ æ•°æ® åŠ¨æ€ç»‘å®š
      * */
     var banner = document.getElementById("banner");
     var inner = document.getElementById("inner");
     var tips = document.getElementById("tips");
     var imgList = inner.getElementsByTagName("img");
-    console.log(imgList.length);
+    //console.log(imgList.length);
     var oLis = tips.getElementsByTagName("li");
-    var jsonData = null;
     !function dataBind() {
-        var xhr = new XMLHttpRequest();
-        xhr.open("get", "bannerimg.json", false);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && /^2\d{2}$/.test(xhr.status)) {
-                jsonData = utils.jsonParse(xhr.responseText);
-            }
-        };
-        xhr.send(null);
-        //ÒÑ¾­³É¹¦»ñÈ¡µ½Êı¾İ£¬½ÓÏÂÀ´ÒªÊµÏÖ¶¯Ì¬Êı¾İ°ó¶¨
-        console.log(jsonData);
-
+        var jsonData = ajaxSend("get","bannerimg.json");
+        //å·²ç»æˆåŠŸè·å–åˆ°æ•°æ®ï¼Œæ¥ä¸‹æ¥è¦å®ç°åŠ¨æ€æ•°æ®ç»‘å®š
         var str = "";
         for (var i = 0; i < jsonData.length; i++) {
             var cur = jsonData[i];
@@ -29,8 +36,8 @@
         }
         str += "<div><img src=''trueSrc='" + jsonData[0].img + "'/></div>";
         inner.innerHTML = str;
-        utils.setCss(inner, "width", (jsonData.length + 1) * 740);//innerµÄ¿í¶È²»Ğ´ËÀ£¬ÓĞ¶àÉÙ¸öinner ¾ÍÓĞ¶à¿í
-        str = "";//ÒòÎª»¹ÓĞÓÃstrËùÒÔ¶¨Òåstr=""
+        utils.setCss(inner, "width", (jsonData.length + 1) * 740);//innerçš„å®½åº¦ä¸å†™æ­»ï¼Œæœ‰å¤šå°‘ä¸ªinner å°±æœ‰å¤šå®½
+        str = "";//å› ä¸ºè¿˜æœ‰ç”¨stræ‰€ä»¥å®šä¹‰str=""
         for (var j = 0; j < jsonData.length; j++) {
             if (j === 0) {
                 str += "<li class='selected'></li>"
@@ -40,7 +47,7 @@
         }
         tips.innerHTML = str;
     }();
-    //ÊµÏÖÍ¼Æ¬ÑÓ³Ù¼ÓÔØ
+    //å®ç°å›¾ç‰‡å»¶è¿ŸåŠ è½½
     function imgDelay() {
         for (var i = 0; i < imgList.length; i++) {
             !function (i) {
@@ -53,7 +60,7 @@
                 tempImg.onload = function () {
                     curImg.src = this.src;
                     curImg.style.display = "block";
-                    //´¦ÀíÍ¸Ã÷¶È
+                    //å¤„ç†é€æ˜åº¦
                     zhufengAnimate(curImg, {opacity: 1}, 1000);
                     tempImg = null;
                 };
@@ -63,7 +70,7 @@
     }
 
     window.setTimeout(imgDelay, 1000);
-    //ÂÖ²¥Í¼×Ô¶¯ÂÖ²¥ Ò»¸ö¶¨Ê±Æ÷²»¶ÏÇı¶¯Ò»¸öautoMoveº¯Êı
+    //è½®æ’­å›¾è‡ªåŠ¨è½®æ’­ ä¸€ä¸ªå®šæ—¶å™¨ä¸æ–­é©±åŠ¨ä¸€ä¸ªautoMoveå‡½æ•°
     var timer = window.setInterval(autoMove, 2000);
     var step = 0;
     var count = imgList.length;
@@ -81,13 +88,13 @@
 
     function focusAlign() {
         for (var i = 0; i < oLis.length; i++) {
-            var tempStep = step > oLis.length - 1 ? 0 : step;//ĞèÒªÒ»¸öÁÙÊ±µÄÀ´´¦ÀíÓÉÓÚÍ¼Æ¬¶àÒ»ÕÅ¶øli²»´æÔÚµÄÇé¿ö
+            var tempStep = step > oLis.length - 1 ? 0 : step;//éœ€è¦ä¸€ä¸ªä¸´æ—¶çš„æ¥å¤„ç†ç”±äºå›¾ç‰‡å¤šä¸€å¼ è€Œliä¸å­˜åœ¨çš„æƒ…å†µ
             var curLi = oLis[i];
             tempStep === i ? curLi.className = "selected" : curLi.className = "";
         }
     }
 
-//Êó±êĞüÍ£Í£Ö¹ÂÖ²¥ Êó±êÀë¿ª¼ÌĞø
+//é¼ æ ‡æ‚¬åœåœæ­¢è½®æ’­ é¼ æ ‡ç¦»å¼€ç»§ç»­
     banner.onmouseover = function () {
         window.clearInterval(timer);
     };
@@ -95,7 +102,7 @@
         timer = window.setInterval(autoMove, 2000);
     };
 
-    //°´Å¥µã»÷ÊµÏÖÂÖ²¥ÇĞ»»
+    //æŒ‰é’®ç‚¹å‡»å®ç°è½®æ’­åˆ‡æ¢
     ~function () {
         for (var i = 0; i < oLis.length; i++) {
             var curLi = oLis[i];
@@ -109,7 +116,149 @@
     }();
 
 }();
-//ĞÂµúÊ×·¢
+//çŒœä½ å–œæ¬¢
+~function(){
 
-var xhr=new XMLHttpRequest();
-xhr.open("get","musicdata.json",false);
+}();
+//æ–°ç¢Ÿé¦–å‘
+~function(){
+    var likeR=document.getElementById("likeR");
+    var step=0;
+    var jsonData1=ajaxSend("get","musitdata.json");
+    //var frg=document.createDocumentFragment();
+    console.log(jsonData1.length);
+    var str=``;
+    str += `<div class="banner2" id="banner2">`;
+    for(var i=0;i<jsonData1.length;i++){
+        if(i==0||i==5||i==10){
+            str += `<div class="inner2"><div class="likeList">`;
+        }else{
+            str +=`<div class="likeList">`;
+        }
+            str +=`<dl>
+                        <dt>
+                            <img src= ${jsonData1[i].img} alt="">
+                            <div class="likeBg">
+                                <div class="likeTop">
+                                    <b class="xin"></b>
+                                    <i class="sjx"></i>
+                                    <ul class="hidden">
+                                        <li><a href="###" class="sc"><b></b>æ”¶è—</a></li>
+                                        <li><a href="###" class="fs"><b></b>å‘é€åˆ°</a></li>
+                                        <li><a href="###" class="tj"><b></b>æ·»åŠ åˆ°</a></li>
+                                        <li><a href="###" class="fx"><b></b>åˆ†äº«åˆ°</a></li>
+                                    </ul>
+                                </div>
+                                <a class="btn" href="###"></a>
+                            </div>
+                        </dt>
+                    </dl>
+                    <p class="title">${jsonData1[i].title}</p>
+                    <p class="sum">${jsonData1[i].name}</p></div>`;
+        if(i==4||i==9||i==14){
+            str += `</div>`;
+        }
+    }
+    str += `</div>`;
+    str+=`<div class="LeftBtn" id="LeftBtn"></div>
+                <div class="RightBtn" id="RightBtn"></div>`;
+    //var str2=banner2.innerHTML=str;
+    likeR.innerHTML=str;
+    var banner2=document.getElementById("banner2");
+    var LeftBtn=document.getElementById("LeftBtn");
+    var RightBtn=document.getElementById("RightBtn");
+    var count=jsonData1.length/5;
+    //console.log(count);
+    console.log(banner2);
+    console.log(LeftBtn);
+    LeftBtn.onclick = function () {
+        console.log(step);
+        step--;
+        if (step <= 0) {
+            step = 0;
+            banner2.style.left=0;
+        }
+        utils.setCss(banner2, "left", step * 750);
+    };
+    RightBtn.onclick = function () {
+        step++;
+        console.log(step);
+        if (step >= count) {
+            step = count - 1;
+            banner2.style.left=-1500+'px';
+        }
+        utils.setCss(banner2, "left", -step * 750);
+    };
+}();
+//è™¾ç±³ç²¾é€‰é›†
+~function() {
+    var likeR2 = document.getElementById("likeR2");
+    var step = 0;
+    var jsonData2 = ajaxSend("get", "xiamidata.json");
+    //var frg=document.createDocumentFragment();
+    console.log(jsonData2.length);
+    var str = ``;
+    str += `<div class="banner1" id="banner1">`;
+    for (var i = 0; i < jsonData2.length; i++) {
+        if (i == 0 || i == 5 || i == 10) {
+            str += `<div class="inner2"><div class="likeList">`;
+        } else {
+            str += `<div class="likeList">`;
+        }
+        str += `<dl>
+                        <dt>
+                            <img src= ${jsonData2[i].img} alt="">
+                            <div class="likeBg">
+                                <div class="likeTop">
+                                    <b class="xin"></b>
+                                    <i class="sjx"></i>
+                                    <ul class="hidden">
+                                        <li><a href="###" class="sc"><b></b>æ”¶è—</a></li>
+                                        <li><a href="###" class="fs"><b></b>å‘é€åˆ°</a></li>
+                                        <li><a href="###" class="tj"><b></b>æ·»åŠ åˆ°</a></li>
+                                        <li><a href="###" class="fx"><b></b>åˆ†äº«åˆ°</a></li>
+                                    </ul>
+                                </div>
+                                <a class="btn" href="###"></a>
+                            </div>
+                        </dt>
+                    </dl>
+                    <p class="title">${jsonData2[i].title}</p>
+                    <p class="sum"><b><img src=${jsonData2[i].bigImg} alt=""></b>${jsonData2[i].name}<i></i><span></span></p></div>`;
+        if (i == 4 || i == 9 || i == 14) {
+            str += `</div>`;
+        }
+    }
+    str += `</div>`;
+    str += `<div class="LeftBtn" id="LeftBtn1"></div>
+                <div class="RightBtn" id="RightBtn1"></div>`;
+    //var str2=banner2.innerHTML=str;
+    likeR2.innerHTML = str;
+    var banner1 = document.getElementById("banner1");
+    var LeftBtn1 = document.getElementById("LeftBtn1");
+    var RightBtn1 = document.getElementById("RightBtn1");
+    var count = jsonData2.length / 5;
+    //console.log(count);
+    console.log(banner1);
+    console.log(LeftBtn1);
+    LeftBtn1.onclick = function () {
+        console.log(step);
+        if (step <= 0) {
+            step = 0;
+            banner1.style.left=0;
+        }else{
+            utils.setCss(banner1, "left", step * 750);
+        }
+        step--;
+    };
+    RightBtn1.onclick = function () {
+        step++;
+        console.log(step);
+        if (step >= count) {
+            step = count - 1;
+            banner1.style.left=-1500+'px';
+        }
+        utils.setCss(banner1, "left", -step * 750);
+    };
+}();
+

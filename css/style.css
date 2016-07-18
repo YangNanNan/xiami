@@ -563,13 +563,24 @@ body{
     color: #999999;
 }
 .marL10{
+    position: relative;
+    width: 750px;
+    height: 196px;
     margin-left: -10px;
+    overflow: hidden;
+}
+.marL10 .banner2,.marL10 .banner1{
+    position: absolute;
+    left: 0;
+    width:2250px;
+    height: 196px;
 }
 .likeR .LeftBtn,.likeR .RightBtn{
     position: absolute;
     width: 25px;
     height: 50px;
     background: url("../images/page_icon.png") no-repeat;
+    cursor: pointer;
 }
 .likeR .LeftBtn{
     /*z-index: 1;*/
@@ -579,7 +590,7 @@ body{
 }
 .likeR .RightBtn{
     top: 50px;
-    right: -15px;
+    right: -4px;
     background-position: 0 0;
 }
 .likeR .LeftBtn:hover{
